@@ -25,19 +25,19 @@ def song_inputs():
             if x == 0:
                 song = input("What's the 1st song called?").lower()
                 artist = input("Who's it by?").lower()
-                list_of_songs.append([song, artist])
+                list_of_songs[song] = artist
             elif x == 1:
                 song = input("What's the 2nd song called?").lower()
                 artist = input("Who's it by?").lower()
-                list_of_songs.append([song, artist])
+                list_of_songs[song] = artist
             elif x == 2:
                 song = input("What's the 3rd song called?").lower()
                 artist = input("Who's it by?").lower()
-                list_of_songs.append([song, artist])
+                list_of_songs[song] = artist
             else:
                 song = input(f"What's the {x}th song called?").lower()
                 artist = input("Who's it by?").lower()
-                list_of_songs.append([song, artist])
+                list_of_songs[song] = artist
 
 song_inputs()
 playlist_results = []
@@ -50,8 +50,10 @@ for song in list_of_songs:
 
 print(playlist_ids)
 all_track_names = []
+good_playlists = []
 for uri in playlist_ids[:]:
     track_names = {}
+    copy_list_of_songs = list_of_songs[:]
     ids = []
     playlist_data = sp.user_playlist_tracks(uri.split(':')[0], uri.split(':')[2])
     for item in playlist_data['items']:
@@ -61,15 +63,23 @@ for uri in playlist_ids[:]:
         meta = sp.track(id)
         name = meta['name'].lower()
         artist = meta['album']['artists'][0]['name'].lower()
+
         if " (" in name:
             name = name.split(" (")[0]
+
+        if name in list_of_songs:
+            del copy_list_of_songs[name]
+            if len(copy_list_of_songs) == 0:
+                good_playlists.append(uri)
+                break
         track_names[name] = artist
-    for song in list_of_songs:
-        if song[0] not in track_names:
-            playlist_ids.remove(uri)
+
+    # for song in list_of_songs:
+    #     if song[0] not in track_names:
+    #         playlist_ids.remove(uri)
     all_track_names.append(track_names)
 print(all_track_names)
-print(playlist_ids)
+print(good_playlists)
 
 
 
