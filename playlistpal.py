@@ -1,8 +1,10 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sys
+import webbrowser
+import client
 
-client_credentials_manager = SpotifyClientCredentials()
+client_credentials_manager = SpotifyClientCredentials(client_id=client.client_id, client_secret=client.client_secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
@@ -25,20 +27,20 @@ def song_inputs():
     if num_of_songs > 0:
         for x in range(num_of_songs):
             if x == 0:
-                song = input("What's the 1st song called?").lower()
-                artist = input("Who's it by?").lower()
+                song = input("What's the 1st song called? \n").lower()
+                artist = input("Who's it by? \n").lower()
                 list_of_songs[song] = artist
             elif x == 1:
-                song = input("What's the 2nd song called?").lower()
-                artist = input("Who's it by?").lower()
+                song = input("What's the 2nd song called? \n").lower()
+                artist = input("Who's it by? \n").lower()
                 list_of_songs[song] = artist
             elif x == 2:
-                song = input("What's the 3rd song called?").lower()
-                artist = input("Who's it by?").lower()
+                song = input("What's the 3rd song called? \n").lower()
+                artist = input("Who's it by? \n").lower()
                 list_of_songs[song] = artist
             else:
-                song = input(f"What's the {x+1}th song called?").lower()
-                artist = input("Who's it by?").lower()
+                song = input(f"What's the {x+1}th song called? \n").lower()
+                artist = input("Who's it by? \n").lower()
                 list_of_songs[song] = artist
 
 
@@ -90,14 +92,7 @@ def get_matching_playlists():
                         good_playlists.append(uri)
                         break
     print(good_playlists)
+    for good in good_playlists:
+        webbrowser.open(good)
 
 get_matching_playlists()
-
-
-
-#   Loops to ensure I get every track of the playlist
-   # while results['next']:
-   #     results = sp.next(results)
-   #     tracks.extend(results['items']["track"]["name"])
-
-#print (json.dumps(tracks[0]))
